@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  prestashop:
+    build: .
+    container_name: prestashop_app
+    ports:
+      - 8083:80
+    links:
+      - mariadb:mariadb
+    depends_on:
+      - mariadb
+    volumes:
+      - ./src:/var/www/html
+    environment:
+      - PS_DOMAIN=localhost
+      - PS_DEV_MODE=1
+      - DB_SERVER=mariadb
+      - DB_USER=root
+      - DB_PASSWD=root
+      - DB_NAME=prestashop
+      - PS_INSTALL_AUTO=0
+      - PS_COUNTRY=EE
+      - ADMIN_MAIL=prestashop@prestashop.ee
+      - ADMIN_PASSWD=prestashop123
+      - PS_INSTALL_DB=1
+
+  mariadb:
+    image: mariadb
+    container_name: prestashop_mariadb
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=prestashop
+    volumes:
+      - ./db_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: nexus.sifast.com:8087/phpmyadmin/phpmyadmin
+    container_name: prestashop_phpmyadmin
+    ports:
+      - "8084:80"
+    environment:
+      - PMA_HOST=172.19.0.2
+      - PMA_PORT=3306
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWORD=root
+
+volumes:
+  db_data:
+  vendor:
+  var:
