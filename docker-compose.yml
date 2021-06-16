@@ -36,7 +36,7 @@ services:
       - ./db_data:/var/lib/mysql
 
   phpmyadmin:
-    image: nexus.sifast.com:8087/phpmyadmin/phpmyadmin
+    image: phpmyadmin/phpmyadmin
     container_name: prestashop_phpmyadmin
     ports:
       - "8084:80"
